@@ -64,7 +64,7 @@ export default function VoucherForm() {
               
               {error && (
                 <div className="p-4 bg-red-70/80 backdrop-blur-sm border border-red-200/50 text-red-600 text-md rounded-lg font-medium">
-                  {error}aaaa
+                  {error}
                 </div>
               )}
 
