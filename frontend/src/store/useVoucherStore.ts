@@ -9,7 +9,7 @@ interface VoucherState {
   aircrafts: { type: string }[],
   fetchAircrafts: () => Promise<void>;
   generate: (data: VoucherFormData) => Promise<void>;
-  reset: () => void;
+  resetStore: () => void;
 }
 
 export const useVoucherStore = create<VoucherState>((set) => ({
@@ -21,10 +21,9 @@ export const useVoucherStore = create<VoucherState>((set) => ({
   fetchAircrafts: async () => {
     try {
       const res = await axios.get('http://localhost:3000/api/aircrafts');
-      // set({ aircrafts: res.data });
       set({ aircrafts: res.data.aircrafts });
     } catch (err) {
-      console.error("Gagal ambil data pesawat", err); // << === GANTI NIH 
+      console.error("Failed to Fetch Aircrafts Data", err);
     }
   },
 
@@ -38,7 +37,7 @@ export const useVoucherStore = create<VoucherState>((set) => ({
       });
 
       if (checkRes.data.exists) {
-        throw new Error("Vouchers already generated for this flight and date.");
+        throw new Error(`Vouchers have already been generated for flight number ${data.flightNumber} on ${data.date}.`);
       }
 
       const genRes = await axios.post('http://localhost:3000/api/generate', data);
@@ -49,5 +48,5 @@ export const useVoucherStore = create<VoucherState>((set) => ({
     }
   },
 
-  reset: () => set({ seats: null, error: null }),
+  resetStore: () => set({ seats: null, error: null }),
 }));
