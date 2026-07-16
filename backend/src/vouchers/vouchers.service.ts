@@ -1,6 +1,6 @@
 import { Injectable, ConflictException, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm'; // Tambahin DataSource
+import { Repository, DataSource } from 'typeorm';
 import { Voucher } from './entities/voucher.entity';
 import { CheckVoucherDto } from './dto/check-voucher.dto';
 import { GenerateVoucherDto } from './dto/generate-voucher.dto';
@@ -22,7 +22,10 @@ export class VouchersService {
         type: aircraft.type
       }
     })
-    return aircraftList;
+    return {
+      success: true,
+      aircrafts: aircraftList
+    };
   }
 
   // POST /api/check
@@ -35,7 +38,10 @@ export class VouchersService {
       .andWhere('voucher.flight_date = :fdate', { fdate: date })
       .getCount();
 
-    return { exists : count > 0 };
+    return { 
+      success: true,
+      exists : count > 0 
+    };
   }
 
   // POST /api/generate

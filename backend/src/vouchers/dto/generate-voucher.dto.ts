@@ -1,5 +1,5 @@
 import { IsString, IsNotEmpty, IsIn, Matches, IsDateString } from 'class-validator';
-import { aircraftTypes } from '../../utils/mock/aircraftData'; // Tambahan import dari fail mock lu
+import { aircraftTypes } from '../../utils/mock/aircraftData';
 
 const allowedAircrafts = aircraftTypes.map(item => item.type);
 
@@ -33,7 +33,7 @@ export class GenerateVoucherDto {
 
   @IsString()
   @IsNotEmpty()
-  // Di sini letak perubahannya: hardcode diganti jadi dinamis dari allowedAircrafts
+
   @IsIn(allowedAircrafts, {
     message: `Aircraft must be one of these: ${allowedAircrafts.join(', ')}`
   })

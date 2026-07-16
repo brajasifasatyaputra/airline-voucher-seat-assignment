@@ -1,13 +1,15 @@
 # ==========================================
 # STAGE 1: BUILDER
 # ==========================================
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 # Set working directory di dalam container
 WORKDIR /app
 
 # Copy file package.json dan package-lock.json (kalau ada)
 COPY package*.json ./
+
+RUN apk add --no-cache python3 make g++
 
 # Install SEMUA dependencies (termasuk devDependencies buat build)
 RUN npm ci
@@ -21,12 +23,14 @@ RUN npm run build
 # ==========================================
 # STAGE 2: PRODUCTION
 # ==========================================
-FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
 # Copy package.json lagi buat install ulang dependencies
 COPY package*.json ./
+
+RUN apk add --no-cache python3 make g++
 
 # Install CUMA dependencies untuk production (node_modules jadi lebih enteng)
 RUN npm ci --omit=dev
